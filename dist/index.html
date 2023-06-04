@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script defer src="./main.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <header>
+        <h2>doIt</h2>
+      </header>
+      <div id="sidebar">
+        <div id="project-wrapper" class="project-wrapper">
+          <h2 class="title">Projects</h2>
+          <div id="project-list" class="project-list"></div>
+          <form id="project-form" class="project-form">
+            <input type="text" id="project-input" class="project-input" />
+            <!-- prettier-ignore -->
+            <button type="submit" id="add-project" class="add-project"> + </button>
+          </form>
+          <!-- prettier-ignore -->
+          <button id="create-project" class="create-project"> + </button>
+        </div>
+      </div>
+      <div id="content">
+        <h2 class="title">Tasks</h2>
+        <div id="task-wrapper">
+          <div id="task-list" class="task-list"></div>
+          <button id="create-task" class="create-task">+</button>
+        </div>
+        <div id="task-form-wrapper">
+          <form class="task-form">
+            <input type="text" id="task-input" class="task-input" />
+            <div class="action-btns">
+              <input type="date" id="task-date" class="task-date" />
+              <select id="task-priority" class="task-priority">
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+              </select>
+              <!-- prettier-ignore -->
+              <select name="project-select" id="project-select" class="project-select">
+              </select>
+            </div>
+            <!-- prettier-ignore -->
+            <button type="submit" id="task-submit" class="task-submit">+</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
