@@ -2,12 +2,14 @@ import taskDisplay from "./taskDisplay";
 import projectDisplay from "./projectDisplay";
 import Task from "./task";
 import Project from "./project";
+import store from "./storage";
 
 export default function dom() {
   const taskContainer = document.getElementById("task-wrapper");
   const taskFormContainer = document.getElementById("task-form-wrapper");
   const projectSelect = document.getElementById("project-select");
   const projectForm = document.getElementById("project-form");
+  const taskForm = document.getElementById("task-form");
   const projects = document.querySelectorAll("project");
   const createTaskBtn = document.getElementById("create-task");
   const addTaskBtn = document.getElementById("task-submit");
@@ -30,8 +32,10 @@ export default function dom() {
     const taskTitle = document.getElementById("task-input").value;
     const dueDate = document.getElementById("task-date").value;
     const priority = document.getElementById("task-priority").value;
-
-    return new Task(taskTitle, dueDate, priority);
+    const project = document.getElementById("project-select").value;
+    
+    taskForm.reset();
+    return new Task(taskTitle, dueDate, priority, project);
   };
 
   const addProject = (e) => {
@@ -39,6 +43,7 @@ export default function dom() {
     const projectTitle = document.getElementById("project-input").value;
 
     addProjectSelect(projectTitle);
+    projectForm.reset();
     return new Project(projectTitle);
   };
 
