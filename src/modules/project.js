@@ -1,7 +1,7 @@
 export default class Project {
-  constructor(name) {
+  constructor(name, tasks) {
     this.name = name;
-    this.tasks = [];
+    this.tasks = [...tasks];
   }
 
   getName() {
@@ -16,12 +16,6 @@ export default class Project {
     const index = this.tasks.filter((t) => t !== task);
     if (index !== -1) {
       this.tasks.splice(index, 1);
-    }
-  }
-
-  addTask(task) {
-    if (!this.tasks.includes(task)) {
-      this.tasks.push(task);
     }
   }
 }
