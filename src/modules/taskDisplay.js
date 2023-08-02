@@ -37,4 +37,4 @@ export default function taskDisplay(task) {
   buttonContainer.append(deleteButton, editButton);
   taskContainer.append(leftSide, rightSide);
   taskList.appendChild(taskContainer);
-}
+};
