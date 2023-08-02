@@ -8,3 +8,4 @@ extends:
   - prettier
 rules: 
   no-console: off
+  no-plusplus: off
