@@ -16,7 +16,13 @@
           <h2 class="title">Projects</h2>
           <div id="project-list" class="project-list"></div>
           <form id="project-form" class="project-form">
-            <input type="text" id="project-input" class="project-input" autocomplete="off"/>
+            <input
+              type="text"
+              id="project-input"
+              class="project-input"
+              autofocus
+              autocomplete="off"
+            />
             <!-- prettier-ignore -->
             <button type="submit" id="add-project" class="add-project"> + </button>
           </form>
@@ -32,7 +38,12 @@
         </div>
         <div id="task-form-wrapper">
           <form id="task-form" class="task-form">
-            <input type="text" id="task-input" class="task-input" autocomplete="off"/>
+            <input
+              type="text"
+              id="task-input"
+              class="task-input"
+              autocomplete="off"
+            />
             <div class="action-btns">
               <input type="date" id="task-date" class="task-date" />
               <select id="task-priority" class="task-priority">
@@ -41,8 +52,6 @@
                 <option value="High">High</option>
               </select>
               <!-- prettier-ignore -->
-              <select name="project-select" id="project-select" class="project-select">
-              </select>
             </div>
             <!-- prettier-ignore -->
             <button type="submit" id="task-submit" class="task-submit">+</button>
