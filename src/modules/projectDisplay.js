@@ -1,10 +1,27 @@
-export default function projectDisplay(project) {
-  const projectList = document.getElementById("project-list");
-  const projectDiv = document.createElement("div");
+import taskDisplay from "./taskDisplay";
 
-  projectDiv.classList.add("project");
+const projectWrapper = document.getElementById("project-list");
+const taskList = document.getElementById("task-list");
 
-  projectDiv.innerText = project.name;
+export function projectDisplay(projects) {
+  projectWrapper.innerText = "";
 
-  projectList.appendChild(projectDiv);
+  projects.forEach((project) => {
+    const projectDiv = document.createElement("div");
+
+    projectDiv.classList.add("project");
+    projectDiv.setAttribute("data-id", projects.indexOf(project));
+    projectDiv.innerText = project.name;
+    projectWrapper.appendChild(projectDiv);
+  });
 }
+
+export const displayTasks = (project) => {
+  taskList.innerHTML = "";
+
+  if (project) {
+    project.tasks.forEach((task) => {
+      taskDisplay(task);
+    });
+  }
+};
