@@ -26,4 +26,11 @@ export default class Task {
   getProject() {
     return this.project;
   }
+
+  formatDate() {
+    const day = this.dueDate.split("/")[0];
+    const month = this.dueDate.split("/")[1];
+    const year = this.dueDate.split("/")[2];
+    return `${month}/${day}/${year}`;
+  }
 }
