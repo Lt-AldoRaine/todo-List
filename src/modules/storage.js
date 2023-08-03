@@ -1,4 +1,6 @@
-const DATA = "projectData";
+import Project from "./project";
+
+const DATA = "data"
 
 const saveProjects = (project) => {
   localStorage.setItem(DATA, JSON.stringify(project));
@@ -6,7 +8,12 @@ const saveProjects = (project) => {
 
 const getProjects = () => {
   const data = localStorage.getItem(DATA);
-  return data ? JSON.parse(data) : [];
+  if (!data) {
+    return [];
+  } 
+  const parsed = JSON.parse(data);
+
+  return parsed.map((projectData) => Object.assign(new Project(), projectData));
 };
 
 export { saveProjects, getProjects };
