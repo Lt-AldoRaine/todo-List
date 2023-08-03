@@ -1,3 +1,10 @@
+:root {
+  --background: #2b2a33;
+  --text-color: #cc6756;
+  --accent-color: #ff806b;
+  --secondary-accent: #3eb489;
+}
+
 *,
 ::before,
 ::after {
@@ -13,6 +20,7 @@ body {
 
 button {
   cursor: pointer;
+  align-items: center;
 }
 
 #container {
@@ -20,12 +28,8 @@ button {
   height: 100%;
   padding: 100px;
   display: grid;
-  grid-template: 100px 1fr / 400px 1fr;
-  background: linear-gradient(
-    179deg,
-    rgba(81, 92, 137, 1) 0%,
-    rgba(29, 36, 65, 1) 100%
-  );
+  grid-template: 10% 1fr / 20% 1fr;
+  background: #1c1b22;
   gap: 20px;
 
   header {
@@ -39,7 +43,7 @@ button {
     h2 {
       font-size: 6rem;
       font-weight: 600;
-      color: #cc6756;
+      color: var(--text-color);
     }
   }
 
@@ -49,6 +53,7 @@ button {
 
     .project-wrapper {
       display: flex;
+      width: 100%;
       flex-direction: column;
       padding: 15px;
       flex: 1;
@@ -56,7 +61,7 @@ button {
       h2 {
         font-size: 3rem;
         font-weight: 600;
-        color: #cc6756;
+        color: var(--text-color);
         margin-bottom: 15px;
         margin-top: 10px;
       }
@@ -66,21 +71,21 @@ button {
 
         .project-input {
           background: transparent;
-          border: solid 2px #ff806b;
+          border: solid 2px var(--accent-color);
           border-radius: 12px;
           font-size: 1.4rem;
           padding: 5px;
-          color: white;
+          color: var(--accent-color);
 
           &:focus {
-            outline: #ff806b;
+            outline: var(--accent-color);
           }
         }
 
         .add-project {
           background: none;
           border: none;
-          color: white;
+          color: var(--secondary-accent);
           font-size: 1.6rem;
           margin-left: 10px;
         }
@@ -91,19 +96,33 @@ button {
         flex-direction: column;
 
         .project {
-          font-size: 2rem;
+          font-size: 1.4rem;
           font-weight: 600;
-          color: #cc6756;
+          color: var(--text-color);
+
+          .delete {
+            height: 30px;
+            width: 30px;
+            background: none;
+            border: none;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-color: var(--accent-color);
+            mask-image: url("./images/trash-can.svg");
+          }
+
+          &:hover {
+            background-color: #1c1b22;
+          }
         }
       }
 
       .create-project {
         width: 60px;
         height: 60px;
-        background-color: #ff806b;
         border: none;
-        border-radius: 40px;
-        color: white;
+        background: none;
+        color: var(--secondary-accent);
         font-size: 2rem;
         font-weight: 600;
         margin-top: auto;
@@ -122,9 +141,8 @@ button {
     .task-submit {
       width: 60px;
       height: 60px;
-      background-color: #ff806b;
-      color: white;
-      border-radius: 32px;
+      color: var(--secondary-accent);
+      background: none;
       border: none;
       font-size: 2rem;
       font-weight: 600;
@@ -135,7 +153,7 @@ button {
     h2 {
       font-size: 3rem;
       font-weight: 600;
-      color: #cc6756;
+      color: var(--text-color);
       margin-bottom: 15px;
       margin-top: 10px;
     }
@@ -143,15 +161,16 @@ button {
     #task-wrapper {
       display: flex;
       flex-direction: column;
-      flex: 1;
+      flex: 2;
 
       .task-list {
         display: flex;
         flex-direction: column;
-        flex: 1;
+        flex: 2;
 
         .task {
           display: flex;
+          height: 10%;
         }
 
         .left-side,
@@ -163,6 +182,7 @@ button {
 
         .left-side {
           gap: 20px;
+          align-items: center;
         }
 
         .right-side {
@@ -172,12 +192,13 @@ button {
 
         .due-date,
         .priority {
-          font-size: 1.2rem;
-          color: #cc6756;
+          font-size: 1.4rem;
+          font-weight: 600;
+          color: var(--text-color);
         }
 
         .edit-task,
-        .delete-task {
+        .delete {
           height: 30px;
           width: 30px;
           background: none;
@@ -187,31 +208,47 @@ button {
         }
 
         .edit-task {
-          background-image: url("./images/pencil.svg");
+          background-color: var(--accent-color);
+          mask-image: url("./images/pencil.svg");
         }
 
-        .delete-task {
-          background-image: url("./images/trash-can.svg");
+        .delete {
+          background-color: var(--accent-color);
+          mask-image: url("./images/trash-can.svg");
         }
 
         .task-title {
           font-size: 2rem;
           font-weight: 600;
-          color: #cc6756;
+          color: var(--text-color);
         }
 
-        #checkbox {
-          display: none;
-        }
+        .check-container {
+          user-select: none;
+          cursor: pointer;
+          margin-top: auto;
+          margin-bottom: auto;
 
-        .checkmark {
-          border: 1px solid #333;
-          display: inline-block;
-          padding: 4px;
-        }
+          input {
+            position: absolute;
+            opacity: 0;
+            height: 0;
+            width: 0;
+          }
 
-        #checkbox:checked + .checkmark {
-          background-color: #cc6756;
+          .checkmark {
+            border: 1px solid var(--secondary-accent);
+            border-radius: 10px;
+            display: inline-block;
+            padding: 4px;
+          }
+
+          &:hover input ~ .checkmark {
+            background-color: var(--secondary-accent);
+          }
+          &:checked input ~ .checkmark {
+            background-color: var(--secondary-accent);
+          }
         }
       }
     }
@@ -229,17 +266,17 @@ button {
 
         .task-input {
           font-size: 2rem;
-          font-weight: 600;
-          color: white;
+          font-weight: 500;
+          color: var(--accent-color);
           background-color: transparent;
-          border: solid 3px #ff806b;
+          border: solid 3px var(--accent-color);
           border-radius: 12px;
           margin-bottom: 0;
           margin-top: 10px;
           padding: 5px;
 
           &:focus {
-            outline: #ff806b;
+            outline: var(--accent-color);
           }
         }
 
@@ -253,13 +290,12 @@ button {
             }
           }
 
-          .project-select,
           .task-date,
           .task-priority {
             background: transparent;
-            border: solid 3px #ff806b;
+            border: solid 3px var(--accent-color);
             border-radius: 10px;
-            color: white;
+            color: var(--accent-color);
             font-size: 1.4rem;
           }
         }
@@ -276,11 +312,10 @@ button {
   }
 
   #sidebar,
-  #content,
-  header {
+  #content {
     width: 100%;
-    border-radius: 30px;
-    background-color: #242a46;
+    border-radius: 22px;
+    background-color: var(--background);
     box-shadow: 0.5rem 0.5rem 0.75rem rgba(0, 0, 0, 0.4);
   }
 }
