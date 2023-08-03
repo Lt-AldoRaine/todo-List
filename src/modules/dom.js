@@ -1,6 +1,5 @@
 import { projectDisplay, displayTasks } from "./projectDisplay";
 import { saveProjects, getProjects } from "./storage";
-import { compareAsc, toDate } from "date-fns";
 import Task from "./task";
 import Project from "./project";
 
@@ -85,6 +84,21 @@ export default function dom() {
     projectDisplay(projects);
   };
 
+  const createDefaultProject = () => {
+    const defaultProj = new Project("Default");
+    const defaultTask = new Task("Clean", "1/1/1970", "Medium", false);
+
+    currentProject = defaultProj;
+    projects[0] = defaultProj;
+    currentProject.index = projects.indexOf(defaultProj);
+
+    defaultProj.tasks.push(defaultTask);
+
+    saveProjects(projects);
+    displayTasks(currentProject);
+    projectDisplay(projects);
+  };
+
   const addTask = (e, task) => {
     e.preventDefault();
     if (currentProject) {
@@ -119,21 +133,6 @@ export default function dom() {
     });
     displayTasks(currentProject);
     console.log(currentProject);
-  };
-
-  const createDefaultProject = () => {
-    const defaultProj = new Project("Default");
-    const defaultTask = new Task("Clean", "1/1/1970", "Medium", false);
-
-    currentProject = defaultProj;
-    projects.push(defaultProj);
-    currentProject.index = projects.indexOf(defaultProj);
-
-    defaultProj.tasks.push(defaultTask);
-
-    saveProjects(defaultProj);
-    displayTasks(currentProject)
-    projectDisplay(projects)
   };
 
   createTaskBtn.onclick = displayTaskForm;
