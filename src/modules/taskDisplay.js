@@ -18,7 +18,7 @@ export default function taskDisplay(task) {
   taskTitle.classList.add("task-title");
   checkbox.setAttribute("id", "checkbox");
   checkmark.classList.add("checkmark");
-  deleteButton.classList.add("delete-task");
+  deleteButton.classList.add("delete");
   editButton.classList.add("edit-task");
   dueDate.classList.add("due-date");
   priority.classList.add("priority");
