@@ -1,5 +1,6 @@
 import { projectDisplay, displayTasks } from "./projectDisplay";
 import { saveProjects, getProjects } from "./storage";
+import { compareAsc, toDate } from "date-fns";
 import Task from "./task";
 import Project from "./project";
 
@@ -9,7 +10,6 @@ export default function dom() {
   const projectForm = document.getElementById("project-form");
   const projectList = document.getElementById("project-list");
   const projectInput = document.getElementById("project-input");
-  const projectWrappers = document.querySelectorAll("#project-list .projects");
   const taskForm = document.getElementById("task-form");
   const createTaskBtn = document.getElementById("create-task");
   const addTaskBtn = document.getElementById("task-submit");
@@ -50,27 +50,27 @@ export default function dom() {
   };
 
   const validProject = () => {
-    const project = document.querySelector("#project-input")
+    const project = document.querySelector("#project-input");
 
     if (!project.value) {
       project.setCustomValidity("Give project a name");
       project.reportValidity();
-      return false
+      return false;
     }
 
-    return true
+    return true;
   };
 
   const validTask = () => {
-    const task = document.querySelector("#task-input")
+    const task = document.querySelector("#task-input");
 
     if (!task.value) {
       task.setCustomValidity("Give task a name");
       task.reportValidity();
-      return false
+      return false;
     }
 
-    return true
+    return true;
   };
 
   const addProject = (e) => {
@@ -79,6 +79,7 @@ export default function dom() {
 
     currentProject = newProj;
     projects.push(newProj);
+    currentProject.index = projects.indexOf(newProj);
 
     saveProjects(projects);
     projectDisplay(projects);
@@ -87,7 +88,6 @@ export default function dom() {
   const addTask = (e, task) => {
     e.preventDefault();
     if (currentProject) {
-      console.log(currentProject);
       currentProject.addTodo(task);
 
       displayTasks(currentProject);
@@ -96,15 +96,51 @@ export default function dom() {
     }
   };
 
-  createTaskBtn.onclick = displayTaskForm;
-  createProjectBtn.onclick = displayProjectForm;
-  projectList.addEventListener("click", (e) => {
-    if (e.target.classList.contains("project")) {
-      const projId = e.target.getAttribute("data-id");
-      currentProject = projects[projId];
+  const toggleTaskCompletion = (e, task) => {
+    const checkbox = e.target.closest("#checkbox");
+    task.toggleCompletion();
+    checkbox.checked = true;
+  };
+
+  const clickProject = (e) => {
+    const selected = e.target.closest(".project");
+    const projectItems = document.querySelectorAll(".project");
+
+    if (selected) {
+      currentProject = projects[selected.dataset.id];
+      currentProject.index = selected.dataset.id;
+      selected.style.backgroundColor = "#0f0f0f";
     }
+
+    projectItems.forEach((item) => {
+      if (item !== selected) {
+        item.style.backgroundColor = "";
+      }
+    });
     displayTasks(currentProject);
     console.log(currentProject);
+  };
+
+  const createDefaultProject = () => {
+    const defaultProj = new Project("Default");
+    const defaultTask = new Task("Clean", "1/1/1970", "Medium", false);
+
+    currentProject = defaultProj;
+    projects.push(defaultProj);
+    currentProject.index = projects.indexOf(defaultProj);
+
+    defaultProj.tasks.push(defaultTask);
+
+    saveProjects(defaultProj);
+    displayTasks(currentProject)
+    projectDisplay(projects)
+  };
+
+  createTaskBtn.onclick = displayTaskForm;
+  createProjectBtn.onclick = displayProjectForm;
+
+  projectList.addEventListener("click", (e) => {
+    clickProject(e);
   });
   addProjectBtn.addEventListener("click", (e) => {
     if (validProject()) {
@@ -121,11 +157,11 @@ export default function dom() {
   });
 
   document.addEventListener("DOMContentLoaded", () => {
-    if (projects === 0) {
+    if (projects.length === 0) {
+      createDefaultProject();
       projects = getProjects();
     }
     projectDisplay(projects);
     displayTasks(currentProject);
-    console.log(currentProject);
   });
 }
