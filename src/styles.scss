@@ -1,6 +1,7 @@
 :root {
   --background: #2b2a33;
   --text-color: #cc6756;
+  --text-white: #f3f3f3;
   --accent-color: #ff806b;
   --secondary-accent: #3eb489;
 }
@@ -28,7 +29,7 @@ button {
   height: 100%;
   padding: 100px;
   display: grid;
-  grid-template: 10% 1fr / 20% 1fr;
+  grid-template: 10% 90% / 20% 80%;
   background: #1c1b22;
   gap: 20px;
 
@@ -71,11 +72,12 @@ button {
 
         .project-input {
           background: transparent;
-          border: solid 2px var(--accent-color);
+          border: solid 2px var(--secondary-accent);
           border-radius: 12px;
           font-size: 1.4rem;
           padding: 5px;
-          color: var(--accent-color);
+          color: var(--text-white);
+          width: 100%;
 
           &:focus {
             outline: var(--accent-color);
@@ -94,25 +96,36 @@ button {
       .project-list {
         display: flex;
         flex-direction: column;
+        overflow-y: auto;
 
         .project {
-          font-size: 1.4rem;
+          display: flex;
+          padding: 10px;
+          font-size: 1.8rem;
           font-weight: 600;
-          color: var(--text-color);
+          color: var(--text-white);
+          align-items: center;
 
           .delete {
-            height: 30px;
-            width: 30px;
-            background: none;
-            border: none;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-color: var(--accent-color);
-            mask-image: url("./images/trash-can.svg");
+            display: none;
           }
 
           &:hover {
             background-color: #1c1b22;
+
+            .delete {
+              display: inline;
+              margin-left: auto;
+              height: 30px;
+              width: 30px;
+              background: none;
+              border: none;
+              background-size: contain;
+              background-repeat: no-repeat;
+
+              background-color: var(--secondary-accent);
+              mask-image: url("./images/trash-can.svg");
+            }
           }
         }
       }
@@ -166,11 +179,17 @@ button {
       .task-list {
         display: flex;
         flex-direction: column;
-        flex: 2;
+        overflow-y: auto;
+        flex: 1;
 
         .task {
           display: flex;
           height: 10%;
+          padding: 10px;
+
+          &:hover {
+            background-color: #1c1b22;
+          }
         }
 
         .left-side,
@@ -182,11 +201,10 @@ button {
 
         .left-side {
           gap: 20px;
-          align-items: center;
         }
 
         .right-side {
-          gap: 10px;
+          gap: 15px;
           margin-left: auto;
         }
 
@@ -194,7 +212,12 @@ button {
         .priority {
           font-size: 1.4rem;
           font-weight: 600;
-          color: var(--text-color);
+          color: var(--text-white);
+        }
+
+        .button-container {
+          display: flex;
+          gap: 10px;
         }
 
         .edit-task,
@@ -208,47 +231,39 @@ button {
         }
 
         .edit-task {
-          background-color: var(--accent-color);
+          background-color: var(--secondary-accent);
           mask-image: url("./images/pencil.svg");
         }
 
         .delete {
-          background-color: var(--accent-color);
+          background-color: var(--secondary-accent);
           mask-image: url("./images/trash-can.svg");
         }
 
         .task-title {
           font-size: 2rem;
           font-weight: 600;
-          color: var(--text-color);
+          color: var(--text-white);
         }
 
         .check-container {
+          align-self: center;
           user-select: none;
-          cursor: pointer;
           margin-top: auto;
           margin-bottom: auto;
+        }
 
-          input {
-            position: absolute;
-            opacity: 0;
-            height: 0;
-            width: 0;
-          }
-
-          .checkmark {
-            border: 1px solid var(--secondary-accent);
-            border-radius: 10px;
-            display: inline-block;
-            padding: 4px;
-          }
-
-          &:hover input ~ .checkmark {
-            background-color: var(--secondary-accent);
-          }
-          &:checked input ~ .checkmark {
-            background-color: var(--secondary-accent);
-          }
+        .checkmark {
+          margin-left: 5px;
+          border: 1px solid var(--secondary-accent);
+          width: 12px;
+          height: 12px;
+          border-radius: 10px;
+          display: inline-block;
+          padding: 4px;
+        }
+        .checked {
+          background-color: var(--secondary-accent);
         }
       }
     }
@@ -313,6 +328,7 @@ button {
 
   #sidebar,
   #content {
+    height: 100%;
     width: 100%;
     border-radius: 22px;
     background-color: var(--background);
