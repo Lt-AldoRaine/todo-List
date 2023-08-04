@@ -1,11 +1,13 @@
 import { projectDisplay, displayTasks } from "./projectDisplay";
 import { saveProjects, getProjects } from "./storage";
+import { compareAsc, toDate } from "date-fns";
 import Task from "./task";
 import Project from "./project";
 
 export default function dom() {
   const taskContainer = document.getElementById("task-wrapper");
   const taskFormContainer = document.getElementById("task-form-wrapper");
+  const taskList = document.getElementById("task-list");
   const projectForm = document.getElementById("project-form");
   const projectList = document.getElementById("project-list");
   const projectInput = document.getElementById("project-input");
@@ -14,7 +16,9 @@ export default function dom() {
   const addTaskBtn = document.getElementById("task-submit");
   const createProjectBtn = document.getElementById("create-project");
   const addProjectBtn = document.getElementById("add-project");
-  const deleteTaskBtn = document.querySelectorAll("delete-task");
+  const deleteBtns = document.querySelectorAll(".delete");
+  const checkmarks = document.querySelectorAll("checkmark");
+  const checkboxes = document.querySelectorAll("#checkbox");
 
   let projects = getProjects();
   let currentProject = projects[0];
@@ -29,7 +33,10 @@ export default function dom() {
     const date = document.getElementById("task-date").value;
     const priority = document.getElementById("task-priority").value;
 
-    return new Task(name, date, priority);
+    const task = new Task(name, date, priority);
+    task.formatDate();
+
+    return task;
   };
 
   const displayProjectForm = () => {
@@ -85,7 +92,7 @@ export default function dom() {
   };
 
   const createDefaultProject = () => {
-    const defaultProj = new Project("Default");
+    const defaultProj = new Project("Inbox");
     const defaultTask = new Task("Clean", "1/1/1970", "Medium", false);
 
     currentProject = defaultProj;
@@ -99,6 +106,14 @@ export default function dom() {
     projectDisplay(projects);
   };
 
+  const deleteProject = (selected) => {
+    currentProject = selected;
+    projects.splice(projects.indexOf(selected), 1);
+    saveProjects(projects);
+    projectDisplay(projects);
+    displayTasks(currentProject)
+  };
+
   const addTask = (e, task) => {
     e.preventDefault();
     if (currentProject) {
@@ -110,20 +125,18 @@ export default function dom() {
     }
   };
 
-  const toggleTaskCompletion = (e, task) => {
-    const checkbox = e.target.closest("#checkbox");
-    task.toggleCompletion();
-    checkbox.checked = true;
-  };
-
   const clickProject = (e) => {
     const selected = e.target.closest(".project");
     const projectItems = document.querySelectorAll(".project");
+    const deleteBtn = e.target.closest(".delete");
 
     if (selected) {
       currentProject = projects[selected.dataset.id];
       currentProject.index = selected.dataset.id;
       selected.style.backgroundColor = "#0f0f0f";
+      if (deleteBtn) {
+        deleteProject(selected);
+      }
     }
 
     projectItems.forEach((item) => {
@@ -131,8 +144,8 @@ export default function dom() {
         item.style.backgroundColor = "";
       }
     });
+
     displayTasks(currentProject);
-    console.log(currentProject);
   };
 
   createTaskBtn.onclick = displayTaskForm;

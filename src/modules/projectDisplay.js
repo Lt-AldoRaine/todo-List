@@ -2,13 +2,13 @@ import taskDisplay from "./taskDisplay";
 
 const projectWrapper = document.getElementById("project-list");
 const taskList = document.getElementById("task-list");
-const deleteBtn = document.createElement("button");
 
 export function projectDisplay(projects) {
   projectWrapper.innerText = "";
 
   projects.forEach((project) => {
     const projectDiv = document.createElement("div");
+    const deleteBtn = document.createElement("button");
 
     projectDiv.classList.add("project");
     projectDiv.setAttribute("data-id", projects.indexOf(project));
@@ -24,7 +24,7 @@ export function projectDisplay(projects) {
 export const displayTasks = (project) => {
   taskList.innerHTML = "";
 
-  if (project) {
+  if (project.tasks) {
     project.tasks.forEach((task) => {
       taskDisplay(task);
     });
