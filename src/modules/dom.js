@@ -16,12 +16,10 @@ export default function dom() {
   const addTaskBtn = document.getElementById("task-submit");
   const createProjectBtn = document.getElementById("create-project");
   const addProjectBtn = document.getElementById("add-project");
-  const deleteBtns = document.querySelectorAll(".delete");
-  const checkmarks = document.querySelectorAll("checkmark");
-  const checkboxes = document.querySelectorAll("#checkbox");
 
   let projects = getProjects();
   let currentProject = projects[0];
+  let currentTask;
 
   const createProject = () => {
     const name = projectInput.value;
@@ -34,7 +32,7 @@ export default function dom() {
     const priority = document.getElementById("task-priority").value;
 
     const task = new Task(name, date, priority);
-    task.formatDate();
+    task.getFormatedDate();
 
     return task;
   };
@@ -85,7 +83,6 @@ export default function dom() {
 
     currentProject = newProj;
     projects.push(newProj);
-    currentProject.index = projects.indexOf(newProj);
 
     saveProjects(projects);
     projectDisplay(projects);
@@ -97,7 +94,6 @@ export default function dom() {
 
     currentProject = defaultProj;
     projects[0] = defaultProj;
-    currentProject.index = projects.indexOf(defaultProj);
 
     defaultProj.tasks.push(defaultTask);
 
@@ -107,21 +103,26 @@ export default function dom() {
   };
 
   const deleteProject = (selected) => {
-    currentProject = selected;
     projects.splice(projects.indexOf(selected), 1);
     saveProjects(projects);
     projectDisplay(projects);
-    displayTasks(currentProject)
   };
 
   const addTask = (e, task) => {
     e.preventDefault();
-    if (currentProject) {
-      currentProject.addTodo(task);
+    currentProject.addTodo(task);
+    currentTask = task;
 
-      displayTasks(currentProject);
+    displayTasks(currentProject);
+    saveProjects(projects);
+    displayTaskList();
+  };
+
+  const deleteTask = (project, task) => {
+    if (project) {
+      project.removeTask(task);
       saveProjects(projects);
-      displayTaskList();
+      displayTasks(currentProject);
     }
   };
 
@@ -130,13 +131,9 @@ export default function dom() {
     const projectItems = document.querySelectorAll(".project");
     const deleteBtn = e.target.closest(".delete");
 
-    if (selected) {
+    if (selected && !deleteBtn) {
       currentProject = projects[selected.dataset.id];
-      currentProject.index = selected.dataset.id;
-      selected.style.backgroundColor = "#0f0f0f";
-      if (deleteBtn) {
-        deleteProject(selected);
-      }
+      selected.style.backgroundColor = "#1c1b22";
     }
 
     projectItems.forEach((item) => {
@@ -148,23 +145,77 @@ export default function dom() {
     displayTasks(currentProject);
   };
 
+  const clickTask = (e) => {
+    const selected = e.target.closest(".task");
+    const taskItems = document.querySelectorAll(".task");
+    const deleteBtn = e.target.closest(".delete");
+    const checkmark = e.target.closest(".checkmark");
+
+    if (selected && !checkmark) {
+      currentTask = currentProject.tasks[selected.dataset.id];
+      selected.style.backgroundColor = "#1c1b22";
+    }
+
+    if (deleteBtn) deleteTask(currentProject, selected);
+
+    taskItems.forEach((item) => {
+      if (item !== selected) {
+        item.style.backgroundColor = "";
+      }
+    });
+  };
+
+  const toggleComplete = (check, task) => {
+    currentTask = currentProject.tasks[task.dataset.id];
+    currentTask.completed = !currentTask.completed;
+    if (currentTask.completed) {
+      check.classList.add("checked");
+      saveProjects(projects);
+    } else {
+      check.classList.remove("checked");
+      saveProjects(projects);
+    }
+  };
+
   createTaskBtn.onclick = displayTaskForm;
   createProjectBtn.onclick = displayProjectForm;
 
-  projectList.addEventListener("click", (e) => {
-    clickProject(e);
+  taskList.addEventListener("click", (e) => {
+    const checkmark = e.target.closest(".checkmark");
+    const selected = e.target.closest(".task");
+    const deleteBtn = e.target.closest(".delete");
+
+    if (checkmark) {
+      toggleComplete(checkmark, selected);
+    } else if (deleteBtn) {
+      deleteTask(currentProject, selected)
+    } else {
+      clickTask(e);
+    }
   });
+
+  projectList.addEventListener("click", (e) => {
+    const deleteBtn = e.target.closest(".delete");
+
+    if (deleteBtn) {
+      deleteProject(e.target.closest(".project"));
+    } else {
+      clickProject(e);
+    }
+  });
+
   addProjectBtn.addEventListener("click", (e) => {
     if (validProject()) {
       addProject(e);
       projectForm.setAttribute("style", "display: none");
     }
   });
+
   addTaskBtn.addEventListener("click", (e) => {
     const task = createTask();
     if (validTask()) {
       addTask(e, task);
-      taskForm.setAttribute("style", "display: none");
+      taskFormContainer.setAttribute("style", "display: none");
     }
   });
 
@@ -173,6 +224,7 @@ export default function dom() {
       createDefaultProject();
       projects = getProjects();
     }
+
     projectDisplay(projects);
     displayTasks(currentProject);
   });

@@ -26,7 +26,7 @@ export const displayTasks = (project) => {
 
   if (project.tasks) {
     project.tasks.forEach((task) => {
-      taskDisplay(task);
+      taskDisplay(project, task);
     });
   }
 };

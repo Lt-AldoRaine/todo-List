@@ -1,10 +1,10 @@
 export default class Task {
-  constructor(name, dueDate, priority, project, completed = false) {
+  constructor(name, dueDate, priority, description) {
     this.name = name;
     this.dueDate = dueDate;
     this.priority = priority;
-    this.project = project;
-    this.completed = completed;
+    this.description = description;
+    this.completed = false;
   }
 
   getName() {
@@ -27,10 +27,10 @@ export default class Task {
     return this.project;
   }
 
-  formatDate() {
+  getFormatedDate() {
     const day = this.dueDate.split("/")[0];
     const month = this.dueDate.split("/")[1];
     const year = this.dueDate.split("/")[2];
-    return `${month}/${day}/${year}`;
+    return `${day}/${month}/${year}`;
   }
 }
