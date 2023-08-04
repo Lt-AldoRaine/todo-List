@@ -1,6 +1,6 @@
+import { format } from "date-fns";
 import { projectDisplay, displayTasks } from "./projectDisplay";
 import { saveProjects, getProjects } from "./storage";
-import { compareAsc, toDate } from "date-fns";
 import Task from "./task";
 import Project from "./project";
 
@@ -28,13 +28,11 @@ export default function dom() {
 
   const createTask = () => {
     const name = document.getElementById("task-input").value;
-    const date = document.getElementById("task-date").value;
+    const date = format(new Date(document.getElementById("task-date").value), "MM-dd-yyyy");
     const priority = document.getElementById("task-priority").value;
+    const description = document.getElementById("task-desc").value
 
-    const task = new Task(name, date, priority);
-    task.getFormattedDate();
-
-    return task;
+    return new Task(name, date, priority, description);
   };
 
   const displayProjectForm = () => {
@@ -120,7 +118,7 @@ export default function dom() {
 
   const deleteTask = (project, task) => {
     if (project) {
-      project.tasks.splice(task.dataset.id, 1)
+      project.tasks.splice(task.dataset.id, 1);
       saveProjects(projects);
       displayTasks(currentProject);
     }
@@ -141,7 +139,6 @@ export default function dom() {
         item.style.backgroundColor = "";
       }
     });
-
     displayTasks(currentProject);
   };
 
@@ -149,9 +146,9 @@ export default function dom() {
     const selected = e.target.closest(".task");
     const taskItems = document.querySelectorAll(".task");
     const deleteBtn = e.target.closest(".delete");
-    const checkmark = e.target.closest(".checkmark");
+    const checkbox = e.target.closest("#checkbox");
 
-    if (selected && !checkmark) {
+    if (selected && !checkbox) {
       currentTask = currentProject.tasks[selected.dataset.id];
       selected.style.backgroundColor = "#1c1b22";
     }
@@ -165,32 +162,24 @@ export default function dom() {
     });
   };
 
-  const toggleComplete = (check, task) => {
-    currentTask = currentProject.tasks[task.dataset.id];
-    currentTask.completed = !currentTask.completed;
-    if (currentTask.completed) {
-      check.classList.add("checked");
-      saveProjects(projects);
-    } else {
-      check.classList.remove("checked");
-      saveProjects(projects);
-    }
-  };
-
   createTaskBtn.onclick = displayTaskForm;
   createProjectBtn.onclick = displayProjectForm;
 
   taskList.addEventListener("click", (e) => {
-    const checkmark = e.target.closest(".checkmark");
-    const deleteBtn = e.target.closest(".delete");
-    const selected = e.target.closest(".task")
+    const checkbox = e.target.closest("#checkbox");
 
-    if (checkmark) {
-      toggleComplete(checkmark, selected);
-    } else if (deleteBtn) {
-      deleteTask(currentProject, selected)
+    if (checkbox) {
+      if (checkbox.checked) {
+        currentTask =
+          currentProject.tasks[e.target.closest(".task").dataset.id];
+        currentTask.completed = !currentTask.completed;
+        console.log(currentTask);
+        saveProjects(projects);
+        displayTasks(currentProject);
+      }
     } else {
       clickTask(e);
+      console.log(currentTask);
     }
   });
 
@@ -198,20 +187,20 @@ export default function dom() {
     const deleteBtn = e.target.closest(".delete");
 
     if (deleteBtn) {
+      console.log(e.target.closest(".project"));
       deleteProject(e.target.closest(".project"));
     } else {
       clickProject(e);
     }
   });
-
   addProjectBtn.addEventListener("click", (e) => {
     if (validProject()) {
       addProject(e);
       projectForm.setAttribute("style", "display: none");
     }
   });
-
   addTaskBtn.addEventListener("click", (e) => {
+    e.preventDefault()
     const task = createTask();
     if (validTask()) {
       addTask(e, task);
@@ -224,7 +213,6 @@ export default function dom() {
       createDefaultProject();
       projects = getProjects();
     }
-
     projectDisplay(projects);
     displayTasks(currentProject);
   });

@@ -6,31 +6,4 @@ export default class Task {
     this.description = description;
     this.completed = false;
   }
-
-  getName() {
-    return this.name;
-  }
-
-  getDueDate() {
-    return this.dueDate;
-  }
-
-  getPriority() {
-    return this.priority;
-  }
-
-  getCompleted() {
-    return this.completed;
-  }
-
-  getProject() {
-    return this.project;
-  }
-
-  getFormattedDate() {
-    const day = this.dueDate.split("/")[0];
-    const month = this.dueDate.split("/")[1];
-    const year = this.dueDate.split("/")[2];
-    return `${day}/${month}/${year}`;
-  }
 }
