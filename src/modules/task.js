@@ -27,7 +27,7 @@ export default class Task {
     return this.project;
   }
 
-  getFormatedDate() {
+  getFormattedDate() {
     const day = this.dueDate.split("/")[0];
     const month = this.dueDate.split("/")[1];
     const year = this.dueDate.split("/")[2];

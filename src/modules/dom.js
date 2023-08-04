@@ -32,7 +32,7 @@ export default function dom() {
     const priority = document.getElementById("task-priority").value;
 
     const task = new Task(name, date, priority);
-    task.getFormatedDate();
+    task.getFormattedDate();
 
     return task;
   };
@@ -120,7 +120,7 @@ export default function dom() {
 
   const deleteTask = (project, task) => {
     if (project) {
-      project.removeTask(task);
+      project.tasks.splice(task.dataset.id, 1)
       saveProjects(projects);
       displayTasks(currentProject);
     }
@@ -182,8 +182,8 @@ export default function dom() {
 
   taskList.addEventListener("click", (e) => {
     const checkmark = e.target.closest(".checkmark");
-    const selected = e.target.closest(".task");
     const deleteBtn = e.target.closest(".delete");
+    const selected = e.target.closest(".task")
 
     if (checkmark) {
       toggleComplete(checkmark, selected);
