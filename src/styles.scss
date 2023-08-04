@@ -283,7 +283,16 @@ button {
         .task-input {
           font-size: 2rem;
           font-weight: 500;
-          color: var(--accent-color);
+        }
+
+        .task-desc {
+          font-size: 1.2rem;
+          resize: none;
+        }
+
+        .task-desc,
+        .task-input {
+          color: var(--text-white);
           background-color: transparent;
           border: solid 3px var(--accent-color);
           border-radius: 12px;
@@ -300,10 +309,8 @@ button {
           display: flex;
           justify-content: space-between;
 
-          input[type="option"] {
-            &:checked {
-              background: transparent;
-            }
+          #task-priority {
+            background-color: var(--background);
           }
 
           .task-date,
@@ -311,7 +318,7 @@ button {
             background: transparent;
             border: solid 3px var(--accent-color);
             border-radius: 10px;
-            color: var(--accent-color);
+            color: var(--text-white);
             font-size: 1.4rem;
           }
         }
