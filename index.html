@@ -47,7 +47,7 @@
             />
             <textarea id="task-desc" class="task-desc" ></textarea>
             <div class="action-btns">
-              <input type="date" id="task-date" class="task-date" />
+              <input type="date" id="task-date" class="task-date" required/>
               <select id="task-priority" class="task-priority">
                 <option value="Low" class="priority">Low</option>
                 <option value="Medium" class="priority">Medium</option>
@@ -57,6 +57,27 @@
             </div>
             <!-- prettier-ignore -->
             <button type="submit" id="task-submit" class="task-submit">+</button>
+          </form>
+          <form id="edit-form" class="task-form">
+            <input
+              type="text"
+              id="edit-task-input"
+              class="task-input"
+              autocomplete="off"
+              autofocus
+            />
+            <textarea id="edit-task-desc" class="task-desc" ></textarea>
+            <div class="action-btns">
+              <input type="date" id="edit-task-date" class="task-date" required/>
+              <select id="edit-task-priority" class="task-priority">
+                <option value="Low" class="priority">Low</option>
+                <option value="Medium" class="priority">Medium</option>
+                <option value="High" class="priority">High</option>
+              </select>
+              <!-- prettier-ignore -->
+            </div>
+            <!-- prettier-ignore -->
+            <button type="submit" id="edit-submit" class="task-submit">+</button>
           </form>
         </div>
       </div>
