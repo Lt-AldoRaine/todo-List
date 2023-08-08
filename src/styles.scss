@@ -29,7 +29,7 @@ button {
   height: 100%;
   padding: 100px;
   display: grid;
-  grid-template: 10% 90% / 20% 80%;
+  grid-template: 10% 90% / 15% 1fr;
   background: #1c1b22;
   gap: 20px;
 
@@ -189,7 +189,7 @@ button {
           cursor: pointer;
           user-select: none;
           display: flex;
-          height: 20%;
+          height: 12%;
           padding: 10px;
 
           &:hover {
