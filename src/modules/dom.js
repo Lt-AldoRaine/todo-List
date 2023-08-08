@@ -7,13 +7,15 @@ import Project from "./project";
 export default function dom() {
   const taskContainer = document.getElementById("task-wrapper");
   const taskFormContainer = document.getElementById("task-form-wrapper");
+  const taskForm = document.getElementById("task-form");
+  const editForm = document.getElementById("edit-form");
   const taskList = document.getElementById("task-list");
   const projectForm = document.getElementById("project-form");
   const projectList = document.getElementById("project-list");
   const projectInput = document.getElementById("project-input");
-  const taskForm = document.getElementById("task-form");
   const createTaskBtn = document.getElementById("create-task");
   const addTaskBtn = document.getElementById("task-submit");
+  const editTaskBtn = document.getElementById("edit-submit");
   const createProjectBtn = document.getElementById("create-project");
   const addProjectBtn = document.getElementById("add-project");
 
@@ -28,9 +30,12 @@ export default function dom() {
 
   const createTask = () => {
     const name = document.getElementById("task-input").value;
-    const date = format(new Date(document.getElementById("task-date").value), "MM-dd-yyyy");
+    const date = format(
+      new Date(document.getElementById("task-date").value),
+      "MM-dd-yyyy"
+    );
     const priority = document.getElementById("task-priority").value;
-    const description = document.getElementById("task-desc").value
+    const description = document.getElementById("task-desc").value;
 
     return new Task(name, date, priority, description);
   };
@@ -44,6 +49,23 @@ export default function dom() {
     taskForm.reset();
     taskContainer.setAttribute("style", "display: none");
     taskFormContainer.setAttribute("style", "display: flex");
+    taskForm.setAttribute("style", "display: flex");
+  };
+
+  const displayEditForm = (e) => {
+    editForm.reset();
+    const selected = e.target.closest(".task");
+
+    currentTask = currentProject.tasks[selected.dataset.id];
+
+    document.getElementById("edit-task-input").value = currentTask.name;
+    document.getElementById("edit-task-desc").value = currentTask.description;
+    document.getElementById("edit-task-date").value = currentTask.dueDate;
+    document.getElementById("edit-task-priority").value = currentTask.priority;
+
+    taskContainer.setAttribute("style", "display: none");
+    taskFormContainer.setAttribute("style", "display: flex");
+    editForm.setAttribute("style", "display: flex");
   };
 
   const displayTaskList = () => {
@@ -124,6 +146,32 @@ export default function dom() {
     }
   };
 
+  const editTask = () => {
+    currentTask.name = document.getElementById("edit-task-input").value;
+    currentTask.desc = document.getElementById("edit-task-desc").value;
+    currentTask.dueDate = format(
+      new Date(document.getElementById("edit-task-date").value),
+      "MM-dd-yyyy"
+    );
+    currentTask.priority = document.getElementById("edit-task-priority").value;
+
+    saveProjects(projects);
+    displayTasks(currentProject);
+    displayTaskList();
+  };
+
+  const toggleComplete = (check, task) => {
+    currentTask = currentProject.tasks[task.dataset.id];
+    currentTask.completed = !currentTask.completed;
+    if (currentTask.completed) {
+      check.classList.add("checked");
+      saveProjects(projects);
+    } else {
+      check.classList.remove("checked");
+      saveProjects(projects);
+    }
+  };
+
   const clickProject = (e) => {
     const selected = e.target.closest(".project");
     const projectItems = document.querySelectorAll(".project");
@@ -146,14 +194,16 @@ export default function dom() {
     const selected = e.target.closest(".task");
     const taskItems = document.querySelectorAll(".task");
     const deleteBtn = e.target.closest(".delete");
-    const checkbox = e.target.closest("#checkbox");
+    const editBtn = e.target.closest(".edit-task");
+    const checkmark = e.target.closest(".checkmark");
 
-    if (selected && !checkbox) {
+    if (selected && !checkmark) {
       currentTask = currentProject.tasks[selected.dataset.id];
       selected.style.backgroundColor = "#1c1b22";
     }
 
     if (deleteBtn) deleteTask(currentProject, selected);
+    if (editBtn) displayEditForm(e);
 
     taskItems.forEach((item) => {
       if (item !== selected) {
@@ -166,20 +216,15 @@ export default function dom() {
   createProjectBtn.onclick = displayProjectForm;
 
   taskList.addEventListener("click", (e) => {
-    const checkbox = e.target.closest("#checkbox");
+    const checkmark = e.target.closest(".checkmark");
 
-    if (checkbox) {
-      if (checkbox.checked) {
-        currentTask =
-          currentProject.tasks[e.target.closest(".task").dataset.id];
-        currentTask.completed = !currentTask.completed;
-        console.log(currentTask);
-        saveProjects(projects);
-        displayTasks(currentProject);
-      }
+    if (checkmark) {
+      // prettier-ignore
+      toggleComplete(checkmark, checkmark.closest(".task"));
+      saveProjects(projects);
+      displayTasks(currentProject);
     } else {
       clickTask(e);
-      console.log(currentTask);
     }
   });
 
@@ -187,7 +232,6 @@ export default function dom() {
     const deleteBtn = e.target.closest(".delete");
 
     if (deleteBtn) {
-      console.log(e.target.closest(".project"));
       deleteProject(e.target.closest(".project"));
     } else {
       clickProject(e);
@@ -200,12 +244,20 @@ export default function dom() {
     }
   });
   addTaskBtn.addEventListener("click", (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const task = createTask();
     if (validTask()) {
       addTask(e, task);
       taskFormContainer.setAttribute("style", "display: none");
+      taskForm.setAttribute("style", "display: none");
     }
+  });
+
+  editTaskBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    editTask();
+    taskFormContainer.setAttribute("style", "display: none");
+    editForm.setAttribute("style", "display: none");
   });
 
   document.addEventListener("DOMContentLoaded", () => {
