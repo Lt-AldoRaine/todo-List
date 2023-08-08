@@ -23,6 +23,26 @@ export default function dom() {
   let currentProject = projects[0];
   let currentTask;
 
+  const toggleReadOnly = (e) => {
+    const editBtn = e.target.closest(".edit-task");
+
+    if (!editBtn) {
+      for (let i = 0; i < editForm.elements.length; i++) {
+        const element = editForm.elements[i];
+        element.setAttribute("disabled", "");
+        if (element.classList.contains("task-submit") && !editBtn) {
+          element.removeAttribute("disabled");
+          element.style.transform = "rotate(45deg)"
+        }
+      }
+    } else if (editBtn) {
+      for (let i = 0; i < editForm.elements.length; i++) {
+        const element = editForm.elements[i];
+        element.removeAttribute("disabled");
+      }
+    }
+  };
+
   const createProject = () => {
     const name = projectInput.value;
     return new Project(name);
@@ -53,14 +73,17 @@ export default function dom() {
   };
 
   const displayEditForm = (e) => {
-    editForm.reset();
     const selected = e.target.closest(".task");
 
+    toggleReadOnly(e);
+
     currentTask = currentProject.tasks[selected.dataset.id];
+    const [month, day, year] = currentTask.dueDate.split("-");
+    const formatted = format(new Date(year, month - 1, day), "yyyy-MM-dd");
 
     document.getElementById("edit-task-input").value = currentTask.name;
     document.getElementById("edit-task-desc").value = currentTask.description;
-    document.getElementById("edit-task-date").value = currentTask.dueDate;
+    document.getElementById("edit-task-date").value = formatted;
     document.getElementById("edit-task-priority").value = currentTask.priority;
 
     taskContainer.setAttribute("style", "display: none");
@@ -86,11 +109,17 @@ export default function dom() {
   };
 
   const validTask = () => {
-    const task = document.querySelector("#task-input");
+    const task = document.querySelector(".task-input");
+    const date = document.querySelector(".task-date");
 
     if (!task.value) {
       task.setCustomValidity("Give task a name");
       task.reportValidity();
+      return false;
+    }
+    if (!date.value) {
+      date.setCustomValidity("Give task a due date");
+      date.reportValidity();
       return false;
     }
 
@@ -197,13 +226,13 @@ export default function dom() {
     const editBtn = e.target.closest(".edit-task");
     const checkmark = e.target.closest(".checkmark");
 
-    if (selected && !checkmark) {
+    if (selected && !checkmark && !editBtn && !deleteBtn) {
       currentTask = currentProject.tasks[selected.dataset.id];
       selected.style.backgroundColor = "#1c1b22";
+      displayEditForm(e);
     }
 
     if (deleteBtn) deleteTask(currentProject, selected);
-    if (editBtn) displayEditForm(e);
 
     taskItems.forEach((item) => {
       if (item !== selected) {
@@ -217,6 +246,11 @@ export default function dom() {
 
   taskList.addEventListener("click", (e) => {
     const checkmark = e.target.closest(".checkmark");
+    const editBtn = e.target.closest(".edit-task");
+
+    if (editBtn) {
+      displayEditForm(e);
+    }
 
     if (checkmark) {
       // prettier-ignore
@@ -237,12 +271,14 @@ export default function dom() {
       clickProject(e);
     }
   });
+
   addProjectBtn.addEventListener("click", (e) => {
     if (validProject()) {
       addProject(e);
       projectForm.setAttribute("style", "display: none");
     }
   });
+
   addTaskBtn.addEventListener("click", (e) => {
     e.preventDefault();
     const task = createTask();
@@ -256,6 +292,8 @@ export default function dom() {
   editTaskBtn.addEventListener("click", (e) => {
     e.preventDefault();
     editTask();
+
+
     taskFormContainer.setAttribute("style", "display: none");
     editForm.setAttribute("style", "display: none");
   });
