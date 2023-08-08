@@ -126,7 +126,8 @@ button {
               background-repeat: no-repeat;
 
               background-color: var(--secondary-accent);
-              mask-image: url("./images/trash-can.svg");
+              -webkit-mask: url("./images/trash-can.svg");
+              mask: url("./images/trash-can.svg");
             }
           }
         }
