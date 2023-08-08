@@ -30,15 +30,18 @@ export default function dom() {
       for (let i = 0; i < editForm.elements.length; i++) {
         const element = editForm.elements[i];
         element.setAttribute("disabled", "");
-        if (element.classList.contains("task-submit") && !editBtn) {
+        if (element.classList.contains("task-submit")) {
           element.removeAttribute("disabled");
-          element.style.transform = "rotate(45deg)"
+          element.style.transform = "rotate(45deg)";
         }
       }
     } else if (editBtn) {
       for (let i = 0; i < editForm.elements.length; i++) {
         const element = editForm.elements[i];
         element.removeAttribute("disabled");
+        if (element.classList.contains("task-submit")) {
+          element.style.transform = "rotate(0deg)";
+        }
       }
     }
   };
@@ -177,7 +180,7 @@ export default function dom() {
 
   const editTask = () => {
     currentTask.name = document.getElementById("edit-task-input").value;
-    currentTask.desc = document.getElementById("edit-task-desc").value;
+    currentTask.description = document.getElementById("edit-task-desc").value;
     currentTask.dueDate = format(
       new Date(document.getElementById("edit-task-date").value),
       "MM-dd-yyyy"
@@ -292,7 +295,6 @@ export default function dom() {
   editTaskBtn.addEventListener("click", (e) => {
     e.preventDefault();
     editTask();
-
 
     taskFormContainer.setAttribute("style", "display: none");
     editForm.setAttribute("style", "display: none");
