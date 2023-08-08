@@ -99,6 +99,8 @@ button {
         overflow-y: auto;
 
         .project {
+          cursor: pointer;
+          user-select: none;
           display: flex;
           padding: 10px;
           font-size: 1.8rem;
@@ -184,8 +186,10 @@ button {
         flex: 1;
 
         .task {
+          cursor: pointer;
+          user-select: none;
           display: flex;
-          height: 10%;
+          height: 20%;
           padding: 10px;
 
           &:hover {
@@ -223,6 +227,7 @@ button {
 
         .edit-task,
         .delete {
+          user-select: none;
           height: 30px;
           width: 30px;
           background: none;
@@ -242,6 +247,7 @@ button {
         }
 
         .task-title {
+          user-select: none;
           font-size: 2rem;
           font-weight: 600;
           color: var(--text-white);
@@ -287,7 +293,8 @@ button {
         }
 
         .task-desc {
-          font-size: 1.2rem;
+          font-size: 1.4rem;
+          height: 60%;
           resize: none;
         }
 
@@ -317,6 +324,7 @@ button {
 
           .task-date,
           .task-priority {
+            user-select: none;
             background: transparent;
             border: solid 3px var(--accent-color);
             border-radius: 10px;
