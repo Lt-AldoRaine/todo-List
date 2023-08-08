@@ -274,8 +274,9 @@ button {
       flex-direction: column;
       flex: 1;
 
+      .edit-form,
       .task-form {
-        display: flex;
+        display: none;
         flex-direction: column;
         flex: 1;
         gap: 20px;
@@ -309,6 +310,7 @@ button {
           display: flex;
           justify-content: space-between;
 
+          #edit-task-priority,
           #task-priority {
             background-color: var(--background);
           }
