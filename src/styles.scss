@@ -238,12 +238,14 @@ button {
 
         .edit-task {
           background-color: var(--secondary-accent);
-          mask-image: url("./images/pencil.svg");
+          -webkit-mask: url("./images/pencil.svg") no-repeat center / contain;
+          mask: url("./images/pencil.svg") no-repeat center / contain;
         }
 
         .delete {
           background-color: var(--secondary-accent);
-          mask-image: url("./images/trash-can.svg");
+          mask: url("./images/trash-can.svg");
+          -webkit-mask: url("./images/trash-can.svg") no-repeat center / contain;
         }
 
         .task-title {
